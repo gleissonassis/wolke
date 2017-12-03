@@ -115,7 +115,7 @@
         const self = this
 
         if (id) {
-          $.get('http://localhost:5000/v1/tasks/' + id, function (data) {
+          $.get('/api/v1/tasks/' + id, function (data) {
             self.item = data
 
             var command = self.item.command.split(';')
@@ -127,7 +127,7 @@
           })
         }
 
-        $.get('http://localhost:5000/v1/servers', function (data) {
+        $.get('/api/v1/servers', function (data) {
           self.servers = data
         })
       },
@@ -141,7 +141,7 @@
 
         if (value) {
           $.ajax({
-            url: 'http://localhost:5000/v1/tasks/' + this.item._id,
+            url: '/api/v1/tasks/' + this.item._id,
             type: 'DELETE'
           })
           .always(function (r) {
@@ -167,7 +167,7 @@
         this.item.description = `Duplicated from ${this.item.description}`
 
         $.ajax({
-          url: 'http://localhost:5000/v1/tasks',
+          url: '/api/v1/tasks',
           type: 'POST',
           data: this.item
         })
@@ -185,7 +185,7 @@
         this.item.command = this.action + ';' + this.item.serverId
         if (this.item._id) {
           $.ajax({
-            url: 'http://localhost:5000/v1/tasks/' + this.item._id,
+            url: '/api/v1/tasks/' + this.item._id,
             type: 'PUT',
             data: this.item
           })
@@ -197,7 +197,7 @@
           })
         } else {
           $.ajax({
-            url: 'http://localhost:5000/v1/tasks',
+            url: '/api/v1/tasks',
             type: 'POST',
             data: this.item
           })

@@ -37,7 +37,7 @@
     methods: {
       update: function () {
         var self = this
-        $.get('http://localhost:5000/v1/servers', function (data) {
+        $.get('/api/v1/servers', function (data) {
           self.servers = data.map(s => {
             s.isRemoved = false
             return s

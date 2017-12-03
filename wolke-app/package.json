@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "webpack-dev-server --inline --progress --config build/webpack.prod.conf.js",
+    "start": "webpack-dev-server --host 0.0.0.0 --port 80 --inline --progress --config build/webpack.prod.conf.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
@@ -17,6 +17,7 @@
     "bootstrap-vue": "^1.2.0",
     "jquery": "^3.2.1",
     "vue": "^2.5.2",
+    "vue-awesome": "^2.3.4",
     "vue-bs-notify": "0.0.3",
     "vue-notification": "^1.3.4",
     "vue-router": "^3.0.1",

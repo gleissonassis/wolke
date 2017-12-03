@@ -68,7 +68,7 @@
     methods: {
       update: function () {
         var self = this
-        $.get('http://localhost:5000/v1/tasks', function (data) {
+        $.get('/api/v1/tasks', function (data) {
           self.items = data
         })
       },
@@ -78,7 +78,7 @@
         if (value) {
           if (self.currentItem._id) {
             $.ajax({
-              url: 'http://localhost:5000/v1/tasks/' + self.currentItem._id,
+              url: '/api/v1/tasks/' + self.currentItem._id,
               type: 'DELETE'
             })
             .always(function (r) {

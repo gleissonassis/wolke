@@ -57,7 +57,7 @@
         self.isGettingServers = true
 
         $.ajax({
-          url: 'http://localhost:5000/v1/actions/',
+          url: '/api/v1/actions/',
           type: 'POST',
           data: {
             action: 'list-servers'
@@ -81,7 +81,7 @@
           var self = this
           if (this.item._id) {
             $.ajax({
-              url: 'http://localhost:5000/v1/servers/' + this.item._id,
+              url: '/api/v1/servers/' + this.item._id,
               type: 'DELETE'
             })
             .always(function (r) {
@@ -101,7 +101,7 @@
         var self = this
         if (this.item._id) {
           $.ajax({
-            url: 'http://localhost:5000/v1/servers/' + this.item._id,
+            url: '/api/v1/servers/' + this.item._id,
             type: 'PUT',
             data: this.item
           })
@@ -113,7 +113,7 @@
           })
         } else {
           $.ajax({
-            url: 'http://localhost:5000/v1/servers',
+            url: '/api/v1/servers',
             type: 'POST',
             data: this.item
           })

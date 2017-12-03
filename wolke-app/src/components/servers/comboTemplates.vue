@@ -22,7 +22,7 @@
     methods: {
       update: function () {
         var self = this
-        $.get('http://localhost:5000/v1/templates', function (data) {
+        $.get('/api/v1/templates', function (data) {
           self.items = data.map(d => {
             return {
               value: d._id,
