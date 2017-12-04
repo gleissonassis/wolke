@@ -20,6 +20,7 @@
     "vue-awesome": "^2.3.4",
     "vue-bs-notify": "0.0.3",
     "vue-notification": "^1.3.4",
+    "vue-resource": "^1.3.4",
     "vue-router": "^3.0.1",
     "vue-select": "^2.3.0"
   },

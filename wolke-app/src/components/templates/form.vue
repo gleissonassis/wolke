@@ -72,7 +72,7 @@
           </div>
           <div class="col-md-12">
             <div class="pull-right">
-              <button type="button" class="btn btn-default" title="Save the template"><span class="glyphicon glyphicon-trash" /> Discard changes</button>
+              <router-link class="btn btn-default" to="/templates"><span class="glyphicon glyphicon-circle-arrow-left" /> Discard changes</router-link>
               <button type="button" class="btn btn-primary" title="Save the template" v-on:click="saveChanges"><span class="glyphicon glyphicon-floppy-disk" /> Save changes</button>
             </div>
           </div>
@@ -124,21 +124,17 @@
         this.$refs.confirmMain.show()
       },
 
-      closeModal: function (value) {
+      closeModalRemoveItem: function (value) {
         const self = this
 
         if (value) {
-          $.ajax({
-            url: '/api/v1/templates/' + this.item._id,
-            type: 'DELETE'
-          })
-          .always(function (r) {
-            if (r.status === 200) {
-              self.$notify.success('The template has been removed successfully!')
-
-              self.$router.push({ path: `/templates` })
-            }
-          })
+          this.$http.delete('/api/v1/templates/' + this.item._id)
+            .then(function (r) {
+              if (r.status === 200) {
+                self.$notify.success('The template has been removed successfully!')
+                self.$router.push({ path: `/templates` })
+              }
+            })
         }
       },
 
@@ -149,18 +145,13 @@
 
         this.item.name = `Duplicated from ${this.item.name}`
 
-        $.ajax({
-          url: '/api/v1/templates',
-          type: 'POST',
-          data: this.item
-        })
-        .done(function (r) {
-          self.$notify.success('The template has been duplicated successfully!')
-          self.$router.push({ path: `/templates/${r._id}` })
-        })
-        .fail(function (r) {
-          self.$notify.danger('An error has occurred while duplicating the template!\n\nStatus code: ' + r.status)
-        })
+        this.$http.post('/api/v1/templates', this.item)
+          .then(function (r) {
+            self.$notify.success('The template has been duplicated successfully!')
+            self.$router.push({ path: `/templates/${r.body._id}` })
+          }, function (r) {
+            self.$notify.danger('An error has occurred while duplicating the template!\n\nStatus code: ' + r.status)
+          })
       },
 
       closeModalRemoveSchedulingItem: function (value) {
@@ -185,28 +176,18 @@
       saveChanges: function () {
         var self = this
         if (this.item._id) {
-          $.ajax({
-            url: '/api/v1/templates/' + this.item._id,
-            type: 'PUT',
-            data: this.item
-          })
-          .done(function () {
+          this.$http.put('/api/v1/templates/' + this.item._id, this.item)
+          .then(function () {
             self.$notify.success('The template has been updated successfully!')
-          })
-          .fail(function (r) {
+          }, function (r) {
             self.$notify.danger('An error has occurred while updating the template!\n\nStatus code: ' + r.status)
           })
         } else {
-          $.ajax({
-            url: '/api/v1/templates',
-            type: 'POST',
-            data: this.item
-          })
-          .done(function (r) {
-            self.item._id = r._id
+          this.$http.post('/api/v1/templates', this.item)
+          .then(function (r) {
+            self.item._id = r.body._id
             self.$notify.success('The template has been created successfully!')
-          })
-          .fail(function (r) {
+          }, function (r) {
             self.$notify.danger('An error has occurred while creating the template!\n\nStatus code: ' + r.status)
           })
         }

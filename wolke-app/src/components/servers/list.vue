@@ -37,12 +37,13 @@
     methods: {
       update: function () {
         var self = this
-        $.get('/api/v1/servers', function (data) {
-          self.servers = data.map(s => {
-            s.isRemoved = false
-            return s
+        this.$http.get('/api/v1/servers')
+          .then(function (response) {
+            self.servers = response.body.map(s => {
+              s.isRemoved = false
+              return s
+            })
           })
-        })
       },
 
       addServer: function () {

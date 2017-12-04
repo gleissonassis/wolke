@@ -78,7 +78,7 @@
           </div>
           <div class="col-md-12">
             <div class="pull-right">
-              <router-link class="btn btn-default" to="/tasks"><span class="glyphicon glyphicon-trash" /> Discard changes</router-link>
+              <router-link class="btn btn-default" to="/tasks"><span class="glyphicon glyphicon-circle-arrow-left" /> Discard changes</router-link>
               <button type="button" class="btn btn-primary" v-if="!item.templateId" title="Save the template" v-on:click="saveChanges"><span class="glyphicon glyphicon-floppy-disk" /> Save changes</button>
               <button type="button" class="btn btn-primary" v-if="item.templateId" disabled="true" title="Save the template" v-on:click="saveChanges"><span class="glyphicon glyphicon-floppy-disk" /> Save changes</button>
             </div>
@@ -115,20 +115,22 @@
         const self = this
 
         if (id) {
-          $.get('/api/v1/tasks/' + id, function (data) {
-            self.item = data
+          this.$http.get('/api/v1/tasks/' + id)
+            .then(function (r) {
+              self.item = r.body
 
-            var command = self.item.command.split(';')
-            self.action = command[0]
+              var command = self.item.command.split(';')
+              self.action = command[0]
 
-            if (self.item.templateId) {
-              self.$notify.warning('This task can\'t be modified!')
-            }
-          })
+              if (self.item.templateId) {
+                self.$notify.warning('This task can\'t be modified!')
+              }
+            })
         }
 
-        $.get('/api/v1/servers', function (data) {
-          self.servers = data
+        this.$http.get('/api/v1/servers')
+        .then(function (r) {
+          self.servers = r.body
         })
       },
 
@@ -140,17 +142,13 @@
         const self = this
 
         if (value) {
-          $.ajax({
-            url: '/api/v1/tasks/' + this.item._id,
-            type: 'DELETE'
-          })
-          .always(function (r) {
-            if (r.status === 200) {
-              self.$notify.success('The task has been removed successfully!')
-
-              self.$router.push({ path: `/tasks` })
-            }
-          })
+          this.$http.delete('/api/v1/tasks/' + this.item._id)
+            .then(function (r) {
+              if (r.status === 200) {
+                self.$notify.success('The task has been removed successfully!')
+                self.$router.push({ path: `/tasks` })
+              }
+            })
         }
       },
 
@@ -166,46 +164,31 @@
 
         this.item.description = `Duplicated from ${this.item.description}`
 
-        $.ajax({
-          url: '/api/v1/tasks',
-          type: 'POST',
-          data: this.item
-        })
-        .done(function (r) {
-          self.$notify.success('The task has been duplicated successfully!')
-          self.$router.push({ path: `/tasks/${r._id}` })
-        })
-        .fail(function (r) {
-          self.$notify.danger('An error has occurred while duplicating the task!\n\nStatus code: ' + r.status)
-        })
+        this.$http.post('/api/v1/tasks', this.item)
+          .then(function (r) {
+            self.$notify.success('The task has been duplicated successfully!')
+            self.$router.push({ path: `/tasks/${r.body._id}` })
+          }, function (r) {
+            self.$notify.danger('An error has occurred while duplicating the task!\n\nStatus code: ' + r.status)
+          })
       },
 
       saveChanges: function () {
         var self = this
         this.item.command = this.action + ';' + this.item.serverId
         if (this.item._id) {
-          $.ajax({
-            url: '/api/v1/tasks/' + this.item._id,
-            type: 'PUT',
-            data: this.item
-          })
-          .done(function (r) {
+          this.$http.put('/api/v1/tasks/' + this.item._id, this.item)
+          .then(function () {
             self.$notify.success('The task has been updated successfully!')
-          })
-          .fail(function (r) {
+          }, function (r) {
             self.$notify.danger('An error has occurred while updating the task!\n\nStatus code: ' + r.status)
           })
         } else {
-          $.ajax({
-            url: '/api/v1/tasks',
-            type: 'POST',
-            data: this.item
-          })
-          .done(function (r) {
-            self.item._id = r._id
+          this.$http.post('/api/v1/tasks', this.item)
+          .then(function (r) {
+            self.item._id = r.body._id
             self.$notify.success('The task has been created successfully!')
-          })
-          .fail(function (r) {
+          }, function (r) {
             self.$notify.danger('An error has occurred while creating the task!\n\nStatus code: ' + r.status)
           })
         }

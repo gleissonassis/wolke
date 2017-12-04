@@ -36,11 +36,8 @@
         if (value) {
           var self = this
           if (this.item._id) {
-            $.ajax({
-              url: '/api/v1/templates/' + this.item._id,
-              type: 'DELETE'
-            })
-            .always(function (r) {
+            this.$http.delete('/api/v1/templates/' + this.item._id)
+            .then(function (r) {
               if (r.status === 200) {
                 self.item.isRemoved = true
                 self.$notify.success('The server has been removed successfully!')
@@ -56,27 +53,17 @@
       save: function () {
         var self = this
         if (this.item._id) {
-          $.ajax({
-            url: '/api/v1/templates/' + this.item._id,
-            type: 'PUT',
-            data: this.item
-          })
-          .done(function () {
+          this.$http.put('/api/v1/templates/' + this.item._id, this.item)
+          .then(function () {
             self.$notify.success('The template has been updated successfully!')
-          })
-          .fail(function (r) {
+          }, function (r) {
             self.$notify.danger('An error has occurred while updating the template!\n\nStatus code: ' + r.status)
           })
         } else {
-          $.ajax({
-            url: '/api/v1/templates',
-            type: 'POST',
-            data: this.item
-          })
-          .done(function () {
+          this.$http.post('/api/v1/templates', this.item)
+          .then(function () {
             self.$notify.success('The template has been created successfully!')
-          })
-          .fail(function (r) {
+          }, function (r) {
             self.$notify.danger('An error has occurred while creating the template!\n\nStatus code: ' + r.status)
           })
         }

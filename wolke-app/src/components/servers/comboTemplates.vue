@@ -22,16 +22,17 @@
     methods: {
       update: function () {
         var self = this
-        $.get('/api/v1/templates', function (data) {
-          self.items = data.map(d => {
-            return {
-              value: d._id,
-              text: d.name
-            }
-          })
+        this.$http.get('/api/v1/templates')
+          .then(function (response) {
+            self.items = response.body.map(d => {
+              return {
+                value: d._id,
+                text: d.name
+              }
+            })
 
-          self.items.unshift({ value: '', text: 'Select a template' })
-        })
+            self.items.unshift({ value: '', text: 'Select a template' })
+          })
       }
     }
   }

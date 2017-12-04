@@ -68,26 +68,24 @@
     methods: {
       update: function () {
         var self = this
-        $.get('/api/v1/tasks', function (data) {
-          self.items = data
-        })
+        this.$http.get('/api/v1/tasks')
+          .then(function (r) {
+            self.items = r.body
+          })
       },
 
       closeModalRemoveItem: function (value) {
         const self = this
         if (value) {
           if (self.currentItem._id) {
-            $.ajax({
-              url: '/api/v1/tasks/' + self.currentItem._id,
-              type: 'DELETE'
-            })
-            .always(function (r) {
-              if (r.status === 200) {
-                self.$notify.success('The task has been removed successfully!')
-                self.items = self.items
-                  .filter(i => i !== self.currentItem)
-              }
-            })
+            this.$http.delete('/api/v1/tasks/' + self.currentItem._id)
+              .then(function (r) {
+                if (r.status === 200) {
+                  self.$notify.success('The task has been removed successfully!')
+                  self.items = self.items
+                    .filter(i => i !== self.currentItem)
+                }
+              })
           }
         }
       },
