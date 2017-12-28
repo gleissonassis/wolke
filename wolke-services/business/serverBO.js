@@ -67,7 +67,7 @@ module.exports = function(templateBO, taskBO, taskHistoryBO) {
                   year: '*',
                   serverId: entity._id,
                   templateId: entity.templateId,
-                  command: schedule.command + ';' + entity._id,
+                  command: schedule.command + ';' + entity.serverId,
                 }));
               }
 
