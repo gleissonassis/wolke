@@ -55,9 +55,9 @@
                   </td>
                   <td>
                     <div class="form-inline">
-                      <input type="number" min="0" max="24" class="form-control" style="width: 60px" v-model="schedulingItem.minute" />
+                      <input type="number" min="0" max="24" class="form-control" style="width: 60px" v-model="schedulingItem.hour" />
                       :
-                      <input type="number" min="0" max="59" class="form-control" style="width: 60px" v-model="schedulingItem.hour"  />
+                      <input type="number" min="0" max="59" class="form-control" style="width: 60px" v-model="schedulingItem.minute"  />
                     </div>
                   </td>
                   <td>
