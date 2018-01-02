@@ -9,6 +9,10 @@ module.exports = function(){
       type: String,
       required: true
     },
+    description: {
+      type: String,
+      required: true
+    },
     serverId: {
       type: String,
       required: true

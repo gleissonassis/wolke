@@ -28,7 +28,7 @@ module.exports = function() {
              logger.log('info', '[turon-server] An error has occurred running the action', error);
              reject(error);
            } else if (response.statusCode !== 202) {
-             logger.log('info', '[turon-server] An error has occurred running the action', body);
+             logger.log('info', '[turon-server] An error has occurred running the action', response.statusCode, body);
              reject(body);
            } else {
              logger.log('info', '[turon-server] The action has beed executed succesfully', body);

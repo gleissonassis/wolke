@@ -217,6 +217,7 @@ module.exports = function(taskHistoryBO, actionBuilder) {
           .then(function() {
             history = {
               taskId: task._id,
+              description: task.description,
               serverId: task.serverId,
               date: new Date(),
               status: 1,
@@ -234,10 +235,11 @@ module.exports = function(taskHistoryBO, actionBuilder) {
           .catch(function(r) {
             history = {
               taskId: task._id,
+              description: task.description,
               serverId: task.serverId,
               date: new Date(),
               status: 0,
-              info: r.conflictingRequest.message,
+              info: 'An error has occured running the task',
               details: r
             };
 
