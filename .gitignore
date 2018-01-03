@@ -64,3 +64,6 @@ coverage
 
 *.private.js
 .DS_Store
+
+#Ignoring just data folder at first level (mongo data files)
+/data/

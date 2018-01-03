@@ -1,6 +1,4 @@
 version: '3'
-volumes:
-  data:
 networks:
   db:
   web:
@@ -8,7 +6,7 @@ services:
   db:
     image: mongo:3.4.10
     volumes:
-      - data:/data/db
+      - ./data:/data/db
     networks:
       - db
   frontend:
